@@ -10,10 +10,10 @@ public:
 	LRUCache(int capacity)
 		: capacity_(capacity) {}
 
-	Value get(Key key) {
+	Value* get(Key key) {
 		auto it = values_.find(key);
 		if (it == values_.end())
-			return -1;
+			return nullptr;
 		auto& it_in_list = it->second.second;
 		latest_use_.erase(it_in_list);
 		latest_use_.push_back(key);
@@ -22,7 +22,7 @@ public:
 		return it->second.first;
 	}
 
-	void put(int key, int value) {
+	void put(Key key, Value* value) {
 		auto it = values_.find(key);
 		if (it == values_.end()) {
 			//没在里面
@@ -47,7 +47,7 @@ public:
 	}
 
 private:
-	std::map<Key, std::pair<Key, std::list<Key>::const_iterator>> values_;
+	std::map<Key, std::pair<Value*, typename std::list<Key>::const_iterator>> values_;
 	std::list<Key> latest_use_;
 	int capacity_;
 };
