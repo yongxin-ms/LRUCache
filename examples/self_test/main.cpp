@@ -9,7 +9,7 @@ public:
 };
 
 int main() {
-	lru_cache::LRUCache<uint64_t, Role> roleCache(5, [](uint64_t roleId, Role* role) {
+	lru_cache::ObjCache<uint64_t, Role> roleCache(5, [](uint64_t roleId, Role* role) {
 		printf("role:%llu deleted\n", roleId);
 		delete role;
 	});
