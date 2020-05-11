@@ -55,7 +55,7 @@ public:
 		if (it == values_.end()) {
 			//没在里面
 			if (latest_use_.size() >= capacity_) {
-				auto v = latest_use_.front();
+				auto& v = latest_use_.front();
 				auto i = values_.find(v);
 				if (i != values_.end()) {
 					remove_func_(v, i->second.first);
