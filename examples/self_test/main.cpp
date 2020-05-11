@@ -10,6 +10,7 @@ public:
 
 int main() {
 	lru_cache::ObjCache<uint64_t, Role> roleCache(5, [](uint64_t roleId, Role* role) {
+		//当对象被顶出去（删除）的时候会执行到这里
 		printf("role:%llu deleted\n", roleId);
 		delete role;
 	});
