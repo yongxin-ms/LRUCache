@@ -50,7 +50,7 @@ public:
 		return it->second.first;
 	}
 
-	void put(Key key, Obj* value) {
+	void put(Key key, Obj* obj) {
 		auto it = values_.find(key);
 		if (it == values_.end()) {
 			//没在里面
@@ -68,9 +68,9 @@ public:
 			latest_use_.push_back(key);
 			auto it_in_list = latest_use_.end();
 			it_in_list--;
-			values_[key] = std::make_pair(value, it_in_list);
+			values_[key] = std::make_pair(obj, it_in_list);
 		} else {
-			it->second.first = value;
+			it->second.first = obj;
 			auto& it_in_list = it->second.second;
 			latest_use_.erase(it_in_list);
 			latest_use_.push_back(key);
