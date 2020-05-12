@@ -1,6 +1,6 @@
 ﻿#pragma once
 #include <list>
-#include <map>
+#include <unordered_map>
 #include <functional>
 
 namespace lru_cache {
@@ -12,7 +12,7 @@ namespace lru_cache {
 	如果密钥已经存在，则变更其数据值；如果密钥不存在，则插入该组「密钥/数据值」。当缓存容量达到上限时，
 		它应该在写入新数据之前删除最久未使用的数据值，从而为新的数据值留出空间。
 
-	这是一个高效的对象缓存器，存取操作都是O(log(N))的时间复杂度。
+	这是一个高效的对象缓存器，存取操作都是O(1)的时间复杂度。
 	使用场景：在网络游戏开发中，我们往往是这样的：
 		玩家上线->从数据库中读取数据->构造Role
 		玩家下线->保存数据到数据库中->析构Role
@@ -80,7 +80,7 @@ public:
 	}
 
 private:
-	std::map<Key, std::pair<Obj*, typename std::list<Key>::const_iterator>> values_;
+	std::unordered_map<Key, std::pair<Obj*, typename std::list<Key>::const_iterator>> values_;
 	std::list<Key> latest_use_;
 	int capacity_;
 	REMOVE_FUNC_CALLBACK remove_func_ = nullptr;
