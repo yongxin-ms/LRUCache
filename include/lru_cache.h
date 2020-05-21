@@ -80,7 +80,7 @@ public:
 	}
 
 private:
-	std::unordered_map<Key, std::pair<Obj*, typename std::list<Key>::const_iterator>> values_;
+	std::unordered_map<Key, std::pair<Obj*, typename std::list<Key>::iterator>> values_;
 	std::list<Key> latest_use_;
 	int capacity_;
 	REMOVE_FUNC_CALLBACK remove_func_ = nullptr;
