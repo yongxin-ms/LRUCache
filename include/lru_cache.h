@@ -44,9 +44,7 @@ public:
 			return nullptr;
 		auto& it_in_list = it->second.second;
 		latest_use_.erase(it_in_list);
-		latest_use_.push_back(key);
-		it_in_list = latest_use_.end();
-		it_in_list--;
+		it_in_list = latest_use_.insert(latest_use_.end(), key);
 		return it->second.first;
 	}
 
@@ -65,17 +63,13 @@ public:
 				latest_use_.pop_front();
 			}
 
-			latest_use_.push_back(key);
-			auto it_in_list = latest_use_.end();
-			it_in_list--;
+			auto it_in_list = latest_use_.insert(latest_use_.end(), key);
 			values_[key] = std::make_pair(obj, it_in_list);
 		} else {
 			it->second.first = obj;
 			auto& it_in_list = it->second.second;
 			latest_use_.erase(it_in_list);
-			latest_use_.push_back(key);
-			it_in_list = latest_use_.end();
-			it_in_list--;
+			it_in_list = latest_use_.insert(latest_use_.end(), key);
 		}
 	}
 
