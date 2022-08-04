@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include <list>
 #include <unordered_map>
 #include <functional>
@@ -78,6 +78,45 @@ private:
 	std::list<Key> latest_use_;
 	int capacity_;
 	REMOVE_FUNC_CALLBACK remove_func_ = nullptr;
+};
+
+template <typename Key>
+class LatestList {
+public:
+	LatestList(int capacity)
+		: capacity_(capacity) {}
+
+	void put(const Key& key) {
+		auto it = values_.find(key);
+		if (it == values_.end()) {
+			// no exist
+			if (latest_use_.size() >= capacity_) {
+				auto& item_to_pop = latest_use_.front();
+				auto i = values_.find(item_to_pop);
+				if (i != values_.end()) {
+					i = values_.erase(i);
+				}
+
+				latest_use_.pop_front();
+			}
+
+			auto it_in_list = latest_use_.insert(latest_use_.end(), key);
+			values_[key] = it_in_list;
+		} else {
+			auto& it_in_list = it->second;
+			latest_use_.erase(it_in_list);
+			it_in_list = latest_use_.insert(latest_use_.end(), key);
+		}
+	}
+
+	const auto& latest_list() const {
+		return latest_use_;
+	}
+
+private:
+	std::unordered_map<Key, typename std::list<Key>::iterator> values_;
+	std::list<Key> latest_use_;
+	int capacity_;
 };
 
 } // namespace lru_cache
