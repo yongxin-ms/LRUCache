@@ -1,4 +1,4 @@
-﻿#include <stdio.h>
+#include <stdio.h>
 #include <assert.h>
 #include "lru_cache.h"
 
@@ -8,7 +8,7 @@ public:
 	int cur_hp_;
 };
 
-int main() {
+void TestObjCache() {
 	lru_cache::ObjCache<uint64_t, Role> roleCache(5, [](uint64_t roleId, Role* role) {
 		//当对象被顶出去（删除）的时候会执行到这里
 		printf("role:%llu deleted\n", roleId);
@@ -49,6 +49,22 @@ int main() {
 
 	obj = roleCache.get(6);
 	assert(obj == nullptr);
+}
 
-	return 0;
+void TestLatestUsed() {
+	lru_cache::LatestUnique<int, 4> a;
+	a.put(1);
+	a.put(2);
+	a.put(10);
+	a.put(1);
+	a.put(1);
+	assert(a.latest().size() == 3);
+
+	std::list<int> b{2, 10, 1};
+	assert(a.latest() == b);
+}
+
+int main() {
+	TestObjCache();
+	TestLatestUsed();
 }

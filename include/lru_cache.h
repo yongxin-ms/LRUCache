@@ -80,17 +80,14 @@ private:
 	REMOVE_FUNC_CALLBACK remove_func_ = nullptr;
 };
 
-template <typename Key>
-class LatestList {
+template <typename Key, int CAPACITY>
+class LatestUnique {
 public:
-	LatestList(int capacity)
-		: capacity_(capacity) {}
-
 	void put(const Key& key) {
 		auto it = values_.find(key);
 		if (it == values_.end()) {
 			// no exist
-			if (latest_use_.size() >= capacity_) {
+			if (latest_use_.size() >= CAPACITY) {
 				auto& item_to_pop = latest_use_.front();
 				auto i = values_.find(item_to_pop);
 				if (i != values_.end()) {
@@ -109,14 +106,13 @@ public:
 		}
 	}
 
-	const auto& latest_list() const {
+	const auto& latest() const {
 		return latest_use_;
 	}
 
 private:
 	std::unordered_map<Key, typename std::list<Key>::iterator> values_;
 	std::list<Key> latest_use_;
-	int capacity_;
 };
 
 } // namespace lru_cache
